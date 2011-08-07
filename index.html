@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<title>STM Training</title>
+		<style type="text/css" media="screen">
+			#container{
+				width:80%;
+				margin:auto;
+			}
+		</style>
+		<script src="main.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript" charset="utf-8">
+			var mySTM={};
+			function startAlarm(){
+				alarmClock(10)( function(count) {
+					document.getElementById("btnSubmit").disabled=true;
+					document.getElementById("txtResult").style.display="none";
+					document.getElementById("spn_answer").innerHTML="<p>Time limit "+count+" seconds.<p>"
+					+mySTM.lastResult.join("&nbsp;&nbsp;&nbsp;");
+				}, function() {
+					//console.dir(mySTM.lastResult);
+					document.getElementById("txtResult").value="";
+					document.getElementById("txtResult").style.display="block";
+					document.getElementById("spn_answer").innerHTML="点击确认答题"
+					document.getElementById("btnSubmit").disabled=false;
+				});
+			}
+			function applySetting(){
+				mySTM=new STMTester({
+					count:document.getElementById("txtCount").value,
+					rule:{
+						start:document.getElementById("txtMin").value,
+						end:document.getElementById("txtMax").value
+						}
+				});
+				//document.getElementById("btnAgain").disabled=false;
+				document.getElementById("setting").style.display="none";
+				document.getElementById("btnSetting").disabled=true;
+				startAlarm();
+			}
+			function answerIt(){
+				var ans=document.getElementById("txtResult").value;
+				mySTM.process(ans.split(" "));
+				if(mySTM.LastNotMatch)
+					alert("wrong,please try again");
+				startAlarm();
+			}
+		</script>
+		
+	</head>
+	<body>
+		<div id="container">
+			<h1 align="center">STM Training</h1>
+			<span id="spn_answer"></span>
+			<br />
+			<blockquote id="setting">
+				Simply STM Training,just choose which training type you prefer below.
+				
+				<p>
+					How many number to remember<input id="txtCount" type="number" />
+				</p> 
+				<p>
+					Choose the range of number to remember min:<input type="number" id="txtMin" />
+					max:<input type="number" id="txtMax" />
+				</p>
+			</blockquote>
+			input the result separated by space
+			<br/>
+			<input type="text" id="txtResult"/>
+			<button id="btnSubmit" disabled="true" onclick="answerIt();">确认</button>
+			<button id="btnAgain" disabled="true" title="dont do this" onclick="startAlarm();">再看一遍</button>
+			<button id="btnSetting" onclick="applySetting();">设置</button>
+		</div>
+	</body>
+</html>
