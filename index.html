@@ -42,7 +42,7 @@
 			}
 			function answerIt(){
 				var ans=document.getElementById("txtResult").value;
-				mySTM.process(ans.split(" "));
+				mySTM.process(ans.split("."));
 				if(mySTM.LastNotMatch)
 					alert("wrong,please try again");
 				startAlarm();
